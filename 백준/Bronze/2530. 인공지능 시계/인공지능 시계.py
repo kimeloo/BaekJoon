@@ -3,11 +3,10 @@ e = int(input())
 h = int(h)
 m = int(m)
 s = int(s)
-if e+s>59:
-    m+=(e+s)//60
-    s=(e+s)%60
-else:
-    s+=e
+s+=e
+if s>59:
+    m+=s//60
+    s=s%60
 if m>59:
     h+=m//60
     m=m%60
