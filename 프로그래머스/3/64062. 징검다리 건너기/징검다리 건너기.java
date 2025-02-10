@@ -32,11 +32,10 @@ class Solution {
 			}
 			if (flag) {
 				sml = mid;
-				mid = (sml+big)/2;
 			} else {
 				big = mid;
-				mid = (sml+big)/2;
 			}
+            mid = (sml+big)/2;
 //			System.out.println((flag?1:0)+" "+sml+" "+mid+" "+big);
 		}
 		
