@@ -2,38 +2,24 @@ import java.util.Scanner;
 
 public class Solution {
 	public static void main(String[] args) {
-		int t, maxFreq, maxScore;
-		int[] scores;
-		Scanner scanner = new Scanner(System.in);
-		
-		t = scanner.nextInt();
-		for (int tc=1; tc<=t; tc++) {
-			scores = new int[101];
-			maxFreq = 0;
-			maxScore = 0;
-			scanner.nextInt();
-			for (int std=0; std<1000; std++) {
-				scores[scanner.nextInt()] += 1;
+		int t, max;
+		int[] counter;
+		Scanner sc = new Scanner(System.in);
+		t = sc.nextInt();
+		for (int tc = 1; tc <= t; tc++) {
+			sc.nextInt();
+			counter = new int[101];
+			for (int i = 0; i < 1000; i++) {
+				counter[sc.nextInt()]++;
 			}
-			
-			for (int score=0; score<101; score++) {
-				if (scores[score]>maxFreq) {
-					maxFreq = scores[score];
-					maxScore = score;
-				}
-				else if (scores[score] == maxFreq){
-					if (score > maxScore) {
-						maxScore = score;
-					}
+			max = 0;
+			for (int i = 100; i >= 0; i--) {
+				if (counter[i] > counter[max]) {
+					max = i;
 				}
 			}
-			
-			System.out.println("#"+tc+" "+maxScore);
-			
-			
+			System.out.println("#" + tc + " " + max);
 		}
-		
-		
-		scanner.close();
+		sc.close();
 	}
 }
