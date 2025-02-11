@@ -1,42 +1,38 @@
 class Solution {
 	public int solution(int[] stones, int k) {
 		// stone 원소 값에 집중하여 계산해보기
-		int sml, mid, big, streamCnt;
+		int left, mid, right, streamCnt;
 		boolean flag;
-		sml = Integer.MAX_VALUE;
-		big = Integer.MIN_VALUE;
+		left = Integer.MAX_VALUE;
+		right = Integer.MIN_VALUE;
 		for (int stone:stones) {
-			sml = Math.min(sml, stone);
-			big = Math.max(big, stone);
-		}
-		mid = (sml+big)/2;
-		
-		while (mid<big&&sml<mid) {
+			left = Math.min(left, stone);
+			right = Math.max(right, stone);
+		}		
+        mid = (left+right)/2;
+        // mid = 0;
+		while (left<mid&&mid<right) {
+            
 			streamCnt = 0;
 			flag = true;
 			for (int stone:stones) {
-				// 처음부터 쭉 가다가, mid보다 작은 값이 k-1번 연속되면 break (mid 값이 너무 크다는 것임)
-				// big = mid로 변경하고, mid 다시 정의
-				// 만약 break 안되고 끝나면, sml = mid로 변경하고, mid 다시 정의
-				
-				// streamCnt : 연속하여 mid보다 작은 값이 나온 횟수
-				if (stone>=mid && streamCnt>0) {	
-					streamCnt = 0;
-				} else if (stone<mid) {
+                mid = (left+right)/2;
+				if (stone<mid) {
 					streamCnt++;
-				}
+				} else {
+                    streamCnt = 0;
+                }
 				if (streamCnt==k) {
 					flag = false;
 					break;
 				}
 			}
 			if (flag) {
-				sml = mid;
+				left = mid;
 			} else {
-				big = mid;
+				right = mid;
 			}
-            mid = (sml+big)/2;
-//			System.out.println((flag?1:0)+" "+sml+" "+mid+" "+big);
+            mid = (left+right)/2;
 		}
 		
 		int answer = mid;
