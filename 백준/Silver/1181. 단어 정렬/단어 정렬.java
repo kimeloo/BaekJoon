@@ -24,13 +24,15 @@ public class Main {
 		
 		String before = "";
 		String current;
+		StringBuilder result = new StringBuilder();
 		for (int i=0; i<N; i++) {
 			current = heapq.poll();
 			if (!current.equals(before)) {
-				System.out.println(current);
+				result.append(current).append("\n");
 			}
 			before = current;
 		}
+		System.out.print(result);
 		br.close();
 	}
 }
