@@ -9,15 +9,15 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		int N, M, turn;
-		String winner = null;
-		ArrayDeque<Integer> doQ = new ArrayDeque<>();
-		ArrayDeque<Integer> suQ = new ArrayDeque<>();
-		ArrayDeque<Integer> doGr, suGr;
+		String winner;
+		ArrayDeque<Integer> doQ, suQ, doGr, suGr;
 
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 
+		doQ = new ArrayDeque<>();
+		suQ = new ArrayDeque<>();
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			doQ.offerFirst(Integer.parseInt(st.nextToken()));
@@ -27,18 +27,18 @@ public class Main {
 		turn = 0;
 		doGr = new ArrayDeque<>();
 		suGr = new ArrayDeque<>();
-		while (winner == null && turn < M) {
+		while (turn < M) {
 			turn++;
 			if (turn % 2 == 1) {
 				doGr.offer(doQ.poll());
 			} else {
 				suGr.offer(suQ.poll());
 			}
-			
+
 			if (doQ.isEmpty() || suQ.isEmpty()) {
 				break;
 			}
-			
+
 			if (!doGr.isEmpty() && !suGr.isEmpty() && (doGr.peekLast() + suGr.peekLast() == 5)) {
 				while (!doGr.isEmpty()) {
 					suQ.offer(doGr.poll());
@@ -56,14 +56,13 @@ public class Main {
 			}
 
 		}
-		if (winner == null) {
-			if (doQ.size() > suQ.size()) {
-				winner = "do";
-			} else if (doQ.size() < suQ.size()) {
-				winner = "su";
-			} else {
-				winner = "dosu";
-			}
+		
+		if (doQ.size() > suQ.size()) {
+			winner = "do";
+		} else if (doQ.size() < suQ.size()) {
+			winner = "su";
+		} else {
+			winner = "dosu";
 		}
 		System.out.println(winner);
 
