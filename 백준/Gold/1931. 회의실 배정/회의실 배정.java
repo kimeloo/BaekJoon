@@ -7,7 +7,7 @@ public class Main{
             if (o1[1]==o2[1]){
                 return Integer.compare(o1[0], o2[0]);
             }
-            return Integer.compare(o2[1], o1[1]);
+            return Integer.compare(o1[1], o2[1]);
         });
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -24,26 +24,15 @@ public class Main{
             q.offer(meeting);
         }
         
-        int start, end, cnt;
+        int end, cnt;
         meeting = q.poll();
-        start = meeting[0];
         end = meeting[1];
-        //System.out.println(start+" "+end);
         cnt = 1;
         while (!q.isEmpty()){
             meeting = q.poll();
-            //System.out.println(meeting[0]+" "+meeting[1]);
-            if (meeting[1]<=end && meeting[0]>start){
-                if (meeting[0]==end){
-                    cnt++;
-                }
+            if (meeting[0]>=end) {
                 end = meeting[1];
-                start = meeting[0];
-            }
-            else if (meeting[1]<=start){
                 cnt++;
-                end = meeting[1];
-                start = meeting[0];
             }
         }
         System.out.println(cnt);
