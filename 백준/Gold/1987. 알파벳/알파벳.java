@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int MAX, N, M;
+	static int CNT, MAX, N, M;
 	static int[] dr = { 0, 0, 1, -1 };
 	static int[] dc = { 1, -1, 0, 0 };
 
@@ -27,7 +27,7 @@ public class Main {
 		}
 		br.close();
 
-		MAX = 0;
+		CNT = MAX = 1;
 		VISITED = new boolean['Z' - 'A' + 1];
 		VISITED[MAP[0][0] - 'A'] = true;
 		search(0, 0);
@@ -41,19 +41,15 @@ public class Main {
 			int nc = c + dc[d];
 			if (isValid(nr, nc) && !VISITED[MAP[nr][nc] - 'A']) {
 				VISITED[MAP[nr][nc] - 'A'] = true;
+				CNT++;
 				search(nr, nc);
 				VISITED[MAP[nr][nc] - 'A'] = false;
+				CNT--;
 				check = true;
 			}
 		}
 		if (!check) {
-			int cnt = 0;
-			for (boolean vstd : VISITED) {
-				if (vstd) {
-					cnt++;
-				}
-			}
-			MAX = Math.max(MAX, cnt);
+			MAX = Math.max(MAX, CNT);
 		}
 	}
 
