@@ -1,126 +1,71 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
     static class Editor {
 
-        static final char CURSOR = '|';
-
-        Char cursor;
+        Deque<Character> left;
+        Deque<Character> right;
 
         public Editor() {
-            // 미리 지정된 글자로 커서 초기화
-            this.cursor = new Char(null, null, CURSOR);
+            this.left = new ArrayDeque<>();
+            this.right = new ArrayDeque<>();
         }
 
         public Editor(String initStr) {
             this();
             for (char c : initStr.toCharArray()) {
-                this.commandP(c);
+                this.left.addLast(c);
             }
         }
 
-        /**
-         * 커서를 좌측으로 이동
-         *
-         * @return 이미 가장 왼쪽인 경우 false 반환
-         */
-        boolean commandL() {
-            if (this.cursor.bef != null) {
-                this.cursor = this.cursor.bef;
-                return true;
+        void commandL() {
+            if (!this.left.isEmpty()) {
+                this.right.addFirst(this.left.removeLast());
             }
-            return false;
         }
 
-        /**
-         * 커서를 우측으로 이동
-         *
-         * @return 이미 가장 오른쪽인 경우 false 반환
-         */
-        boolean commandD() {
-            if (this.cursor.nxt != null) {
-                this.cursor = this.cursor.nxt;
-                return true;
+        void commandD() {
+            if (!this.right.isEmpty()) {
+                this.left.addLast(this.right.removeFirst());
             }
-            return false;
         }
 
-        /**
-         * 커서 좌측의 글자를 지움
-         */
         void commandB() {
-            if (this.cursor.bef != null) {
-                // 커서 좌측의 글자를 지움
-                this.cursor.bef = this.cursor.bef.bef;
-                if (this.cursor.bef != null) {
-                    // 새로운 커서 좌측 글자의 nxt를 커서로 설정
-                    this.cursor.bef.nxt = this.cursor;
-                }
+            if (!this.left.isEmpty()) {
+                this.left.removeLast();
             }
         }
 
-        /**
-         * 커서 좌측에 글자 삽입
-         */
         void commandP(char c) {
-            // cursor.bef와 cursor 사이에 위치할 newChar 생성
-            Char newChar = new Char(this.cursor.bef, this.cursor, c);
-            if (this.cursor.bef != null) {
-                // cursor.bef의 nxt를 newChar로 설정
-                this.cursor.bef.nxt = newChar;
-            }
-            // cursor.bef를 newChar로 설정
-            this.cursor.bef = newChar;
+            this.left.addLast(c);
         }
 
         String print() {
-            while (this.commandL()) {
-                // 더이상 왼쪽에 글자가 없을 때까지 왼쪽으로 이동
+            StringBuilder result = new StringBuilder();
+
+            while (!this.left.isEmpty()) {
+                result.append(this.left.removeFirst());
+            }
+            while (!this.right.isEmpty()) {
+                result.append(this.right.removeFirst());
             }
 
-            StringBuilder result = new StringBuilder();
-            do {
-                // 더이상 오른쪽에 글자가 없을 때까지 오른쪽으로 이동
-                if (this.cursor.val != CURSOR) {
-                    // 커서를 제외하여 result에 추가
-                    result.append(this.cursor.val);
-                }
-            } while (this.commandD());
             return result.toString();
-        }
-    }
-
-    static class Char {
-
-        Char bef;
-        Char nxt;
-        char val;
-
-        public Char() {
-
-        }
-
-        public Char(Char bef, Char nxt, char val) {
-            this.bef = bef;
-            this.nxt = nxt;
-            this.val = val;
         }
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        Editor editor = new Editor(st.nextToken());
+        Editor editor = new Editor(br.readLine().trim());
 
-        st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(br.readLine().trim());
 
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            char cmd = st.nextToken().charAt(0);
+            String input = br.readLine().trim();
+            char cmd = input.charAt(0);
             switch (cmd) {
                 case 'L':
                     editor.commandL();
@@ -132,7 +77,7 @@ public class Main {
                     editor.commandB();
                     break;
                 case 'P':
-                    char val = st.nextToken().charAt(0);
+                    char val = input.charAt(2);
                     editor.commandP(val);
                     break;
                 default:
