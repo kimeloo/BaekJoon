@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -27,29 +30,31 @@ public class Main {
     }
 
     static void solve() {
-        PriorityQueue<int[]> heapq = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
+        ArrayDeque<int[]> deque = new ArrayDeque<>();
 
-        heapq.add(new int[]{n, 0});
-        while (!heapq.isEmpty()) {
-            int[] cur = heapq.poll();
-            if (dist[cur[0]] > cur[1]) {
-                dist[cur[0]] = cur[1];
+        deque.add(new int[]{n, 0});
+        while (!deque.isEmpty()) {
+            int[] cur = deque.pollFirst();
+            int pos = cur[0];
+            int time = cur[1];
+            if (dist[pos] > time) {
+                dist[pos] = time;
 
-                if (cur[0] > 0 && dist[cur[0] - 1] > cur[1] + 1) {
-                    heapq.offer(new int[]{cur[0] - 1, cur[1] + 1});
+                if (pos > 0 && dist[pos - 1] > time + 1) {
+                    deque.offerLast(new int[]{pos - 1, time + 1});
                 }
-                if (cur[0] < 100000 && dist[cur[0] + 1] > cur[1] + 1) {
-                    heapq.offer(new int[]{cur[0] + 1, cur[1] + 1});
+                if (pos < 100000 && dist[pos + 1] > time + 1) {
+                    deque.offerLast(new int[]{pos + 1, time + 1});
                 }
-                if (cur[0] != 0) {
-                    for (int nxt = cur[0]; nxt < 100001; nxt *= 2) {
-                        if (dist[nxt] > cur[1]) {
-                            heapq.offer(new int[]{nxt, cur[1]});
+                if (pos != 0) {
+                    for (int nxt = pos * 2; nxt < 100001; nxt *= 2) {
+                        if (dist[nxt] > time) {
+                            deque.offerFirst(new int[]{nxt, time});
                         }
                     }
                 }
             }
-            if (cur[0] == k) {
+            if (pos == k) {
                 break;
             }
         }
