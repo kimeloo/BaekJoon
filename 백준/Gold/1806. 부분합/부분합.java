@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
@@ -9,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         input();
-        int result = bisect();
+        int result = twoPointer();
         System.out.println(result);
     }
 
@@ -28,7 +27,7 @@ public class Main {
         }
     }
 
-    static int bisect() {
+    static int twoPointer() {
         // 불가능한 조건
         if (sumArr[n] < target) {
             return 0;
