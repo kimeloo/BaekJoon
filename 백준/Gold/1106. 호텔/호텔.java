@@ -51,8 +51,8 @@ public class Main {
         int customer = city[1];
         int maxCustomer = dp[maxCost];
 
-        for (int n = maxCost / cost; n > 0; n--) {
-            maxCustomer = Math.max(dp[maxCost], dp[maxCost - n * cost] + customer * n);
+        if (maxCost >= cost) {
+            maxCustomer = Math.max(dp[maxCost], dp[maxCost - cost] + customer);
         }
 
         return maxCustomer;
