@@ -1,29 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Arrays;
 
 public class Main {
-	static long pow(long base, long exp, long mod) {
-		long res = 1;
-		base %= mod;
-		while (exp > 0) {
-			if (exp % 2 == 1) {
-				res = (res * base) % mod;
-			}
-			exp /= 2;
-			base = (base * base) % mod;
-		}
-		return res;
-	}
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		long a = Long.parseLong(st.nextToken());
-		long b = Long.parseLong(st.nextToken());
-		long c = Long.parseLong(st.nextToken());
-		System.out.println(pow(a, b, c));
-		br.close();
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int[] input = Arrays.stream(br.readLine().trim().split(" "))
+            .mapToInt(Integer::parseInt).toArray();
+
+        System.out.println(pow(input[0], input[1], input[2]));
+    }
+
+    static int pow(int base, int exp, int div) {
+        int result = 1;
+
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result = (int) (((long) result * base) % div);
+            }
+            base = (int) (((long) base * base) % div);
+            exp /= 2;
+        }
+
+        return result;
+    }
 }
