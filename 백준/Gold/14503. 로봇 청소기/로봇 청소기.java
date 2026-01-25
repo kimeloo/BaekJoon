@@ -43,25 +43,24 @@ public class Main {
     static int solve() {
         int result = 0;
 
-        int[] pos = startPos;
-        while (true) {
-            int x = pos[0];
-            int y = pos[1];
-            int d = pos[2];
+        int curR = startPos[0];
+        int curC = startPos[1];
+        int curD = startPos[2];
 
+        while (true) {
             // 1. 현재 칸이 아직 청소되지 않은 경우, 현재 칸을 청소한다.
-            if (field[x][y] == 0) {
+            if (field[curR][curC] == 0) {
                 result++;
-                field[x][y] = -1;
+                field[curR][curC] = -1;
             }
 
             // 2. 현재 칸의 주변 4칸 중
             int notCleanedDir = -1;
             for (int i = 1; i < 5; i++) {
-                int dir = (d - i + 4) % 4;  // 바라보는 방향부터 반시계 방향으로 주변을 탐색
-                int nx = x + dr[dir];
-                int ny = y + dc[dir];
-                if (isValid(nx, ny) && field[nx][ny] == 0) {
+                int dir = (curD - i + 4) % 4;  // 바라보는 방향부터 반시계 방향으로 주변을 탐색
+                int nextR = curR + dr[dir];
+                int nextC = curC + dc[dir];
+                if (isValid(nextR, nextC) && field[nextR][nextC] == 0) {
                     notCleanedDir = dir;
                     break;
                 }
@@ -69,12 +68,13 @@ public class Main {
 
             if (notCleanedDir == -1) {
                 // 청소되지 않은 빈 칸이 없는 경우
-                int nx = x - dr[d];
-                int ny = y - dc[d];
+                int nextR = curR - dr[curD];
+                int nextC = curC - dc[curD];
 
-                if (isValid(nx, ny) && field[nx][ny] != 1) {
+                if (isValid(nextR, nextC) && field[nextR][nextC] != 1) {
                     // 바라보는 방향을 유지한 채로 한칸 후진
-                    pos = new int[]{nx, ny, d};
+                    curR = nextR;
+                    curC = nextC;
                 } else {
                     // 후진할 수 없다면 작동 중지
                     break;
@@ -82,9 +82,9 @@ public class Main {
             } else {
                 // 청소되지 않은 빈 칸이 있는 경우 해당 칸으로 전진
                 // 반시계 방향으로의 탐색은 이미 앞에서 마쳤으므로 전진만 하면 됨
-                int nx = x + dr[notCleanedDir];
-                int ny = y + dc[notCleanedDir];
-                pos = new int[]{nx, ny, notCleanedDir};
+                curR = curR + dr[notCleanedDir];
+                curC = curC + dc[notCleanedDir];
+                curD = notCleanedDir;
             }
         }
 
