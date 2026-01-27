@@ -25,18 +25,38 @@ public class Main {
     static int solve() {
         int result = 0;
 
-        for (int height = max; height > 0; height--) {
-            int lastIdx = -1;
-            for (int i = 0; i < blocks.length; i++) {
-                if (blocks[i] >= height) {
-                    if (lastIdx != -1) {
-                        result += i - lastIdx - 1;
-                    }
-                    lastIdx = i;
-                }
-            }
+        int[] leftMax = getLeftMax();
+        int[] rightMax = getRightMax();
+        for (int i = 0; i < blocks.length; i++) {
+            result += Math.min(leftMax[i], rightMax[i]) - blocks[i];
         }
 
         return result;
     }
+
+    static int[] getLeftMax() {
+        int[] leftMax = new int[blocks.length];
+
+        int max = 0;
+        for (int i = 0; i < blocks.length; i++) {
+            max = Math.max(blocks[i], max);
+            leftMax[i] = max;
+        }
+
+        return leftMax;
+    }
+
+    static int[] getRightMax() {
+        int[] rightMax = new int[blocks.length];
+
+        int max = 0;
+        for (int i = blocks.length - 1; i >= 0; i--) {
+            max = Math.max(blocks[i], max);
+            rightMax[i] = max;
+        }
+
+        return rightMax;
+    }
+
+
 }
