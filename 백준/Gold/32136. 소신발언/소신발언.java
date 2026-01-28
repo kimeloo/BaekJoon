@@ -1,48 +1,58 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int N;
-	static long[] An;
+    static int N;
+    static int[] cows;
 
-	static boolean check(long maxT) {
+    static void input() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine().strip());
+        cows = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            cows[i] = Integer.parseInt(st.nextToken());
+        }
+        br.close();
+    }
 
-		// time / An[i] = | i - heater |
+    static long binarySearch() {
+        // T를 탐색
+        long left = 0L;
+        long right = 150000000000L;   // 300,000 * 500,000
+        long mid = 0L;
+        while (left < right) {
+            mid = left + (right - left) / 2;
+            if (simulate(mid)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
 
-		long minR, maxL;
-		minR = Long.MAX_VALUE;
-		maxL = Long.MIN_VALUE;
-		for (int i = 0; i < N; i++) {
-			minR = Math.min(minR, i + maxT / An[i]);
-			maxL = Math.max(maxL, i - maxT / An[i]);
-		}
-		if (maxL <= minR) {
-			return true;
-		}
-		return false;
-	}
-	public static void main(String[] args) {
-		long left, mid, right;
+    static boolean simulate(long time) {
+        int start = 0;
+        int end = N;
+        for (long i = 0; i < N; i++) {
+            long distance = time / cows[(int)i];
+            int left = (int) Math.max(start, i-distance);
+            int right = (int) Math.min(end, i+distance);
+            if (left > end || right < start){
+                return false;
+            }
+            start = left;
+            end = right;
+        }
+        return true;
+    }
 
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		An = new long[N];
-		for (int i = 0; i < N; i++) {
-			An[i] = sc.nextInt();
-		}
-		sc.close();
-
-		mid = 0;
-		left = 0;
-		right = 300000L * 500000L;
-		while (left <= right) {
-			mid = (left + right) / 2L;
-			if (check(mid)) {
-				right = mid - 1;
-			} else {
-				left = mid + 1;
-			}
-		}
-
-		System.out.println(left);
-	}
+    public static void main(String[] args) throws IOException {
+        input();
+        System.out.println(binarySearch());
+    }
 }
